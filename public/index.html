@@ -55,9 +55,9 @@
       </ons-toolbar>
 
       <ons-tabbar swipeable position="auto" id="tabbar">
-        <ons-tab page="tab1.html" label="Home" icon="ion-home, material:md-home" badge="7" active>
+        <ons-tab page="tab1.html" label="Home" icon="ion-home, material:md-home"  active>
         </ons-tab>
-        <ons-tab page="tab2.html" label="Cart" icon="md-shopping-cart" active-icon="md-shopping-cart">
+        <ons-tab page="tab2.html" label="Cart" icon="md-shopping-cart"id="Fillbadge" badge="" active-icon="md-shopping-cart">
         </ons-tab>
         <ons-tab page="tab3.html" label="product" icon="md-shopping-cart" active-icon="md-shopping-cart">
         </ons-tab>
@@ -203,6 +203,7 @@
       <ons-list-header>SHOPPING CART</ons-list-header>
 
       <div id="pic"></div>
+      <div id="showprice"></div>
         <script id="pic_template" type="text/template"> 
                     <% 
                      cart.forEach(function(cart){
@@ -219,7 +220,7 @@
                 </div>
                 <div class="right">
 
-                    <ons-icon icon="md-delete" onclick="deleteb(<%=num%>)"></ons-icon></div>
+                    <ons-icon icon="md-delete" onclick="deleteb(<%=num%>); delprice('<%= cart.data().price %>')"></ons-icon></div>
 
                   </div>
             </ons-list-item><% });%> 
@@ -301,7 +302,7 @@
               <ons-list-item>React</ons-list-item>
             </ons-list>
           </div>
-          <ons-button onclick="addtocart('<%= data.pid %>')">ADD TO CART</ons-button>
+          <ons-button onclick="addtocart('<%= data.pid %>');totalprice('<%= data.price%>')">ADD TO CART</ons-button>
           <%})%>
         </ons-card>
      
@@ -576,11 +577,12 @@ dataCart.push(retrievedData);
  ons.notification.toast("เพิ่มสินค้าใส่ตะกร้า", {
     timeout: 2000
   });
+  $("#Fillbadge").attr('badge', dataCart.length);
 }
 //????????? array ??????????????? firebase ?????????????????? template
 
 function getData2cart(){
-  
+  $("#Fillbadge").attr('badge','');
   var Delete=[]
   document.getElementById('pic').innerHTML=""
   console.log(dataCart);
@@ -619,6 +621,24 @@ function deleteb(i) {
   getData2cart()
 
 }
+var priceitem = 0;
+
+  function totalprice(price1) {
+    var price1 = parseInt(price1, 10)
+    console.log(price1);
+
+    priceitem = priceitem + price1;
+    $('#showprice').html("<p><b>&nbsp; Total Price is : </b>" + priceitem + " ฿</p>");
+
+  }
+  function delprice(price2) {
+    var price2 = parseInt(price2, 10)
+    console.log(price2);
+
+    priceitem = priceitem - price2;
+    $('#showprice').html("<p><b>&nbsp; Total Price is : </b>" + priceitem + " ฿</p>");
+
+  }
 </script>
 
 </html>
