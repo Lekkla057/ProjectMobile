@@ -202,27 +202,27 @@
     <ons-page id="Tab2">
       <ons-list-header>SHOPPING CART</ons-list-header>
 
-      <div id="pic">
+      <div id="pic"></div>
         <script id="pic_template" type="text/template"> 
                     <% cart.forEach(function(cart){%>
+            <div>          
             <ons-list-item>
                 <div class="left">
-                    <img class="list-item__thumbnail" src="<%= cart.photo %>">
+                    <img class="list-item__thumbnail" src="<%= cart.data().picc %>">
                 </div>
                 <div class="center">
                     <span class="list-item__title"><%= cart.itemname %></span>
-                    <span class="list-item__subtitle" style="color: blue;"><%= cart.price %></span>
+                    <span class="list-item__subtitle" style="color: blue;"><%= cart.data().price %></span>
                 </div>
                 <div class="right">
 
-                    <ons-icon icon="md-delete"></ons-icon>
+                    <ons-icon icon="md-delete"></ons-icon></div>
 
-                    </div>
+                  </div>
             </ons-list-item><%});%> 
 
         </Script>
-      </div>
-
+    
 
       <ons-button modifier="large">PROCEED TO PAY</ons-button>
 
@@ -268,20 +268,36 @@
       </ons-toolbar>
       <div id="detail"></div>
       <script id="detail_template" type="text/template"> 
-     <ons-row>
-        <% detail.forEach(function(detail){
-          var details = detail.data();
-          %>
-    <ons-col width="100" >
-      <ons-card >
-            <img class="" src="<%= details.picc %>" width="99%"height="200px"><br>
-    <%= details.Category %><br>
-    <%= details.title %><br>
-    ฿<%= details.price %>
-      </ons-card></ons-col>
-    
-      <%});%> 
-     </ons-row>
+        <ons-card>
+          <ons-carousel swipeable auto-scroll overscrollable id="carousel" style="height: 300px;">
+            <% detail.forEach(function(data){   
+              var data = data.data(); %>
+                <ons-carousel-item id="carousel1DeP" style="background: url('<%=data.picc%>') no-repeat center; background-size: contain;">
+                </ons-carousel-item>
+                <ons-carousel-item id="carousel2DeP" style="background: url('images/2.jpg') no-repeat center; background-size: contain;">
+                </ons-carousel-item>
+                <ons-carousel-item id="carousel3DeP" style="background: url('images/3.jpg') no-repeat center; background-size: contain;">
+                </ons-carousel-item>
+  
+         </ons-carousel>
+            
+          <div class="title">
+            <%= data.price%>
+          </div>
+          <div class="content">
+            <div>
+              <%= data.title %>
+            </div>
+            <ons-list>
+              <ons-list-header>Bindings</ons-list-header>
+              <ons-list-item>Vue</ons-list-item>
+              <ons-list-item>Angular</ons-list-item>
+              <ons-list-item>React</ons-list-item>
+            </ons-list>
+          </div>
+          <ons-button onclick="addtocart('<%= data.pid %>')">ADD TO CART</ons-button>
+          <%})%>
+        </ons-card>
      
     
     </Script>
@@ -316,7 +332,7 @@
     }
     else if (event.index == 1) {
       console.log('Cart click');
-      getCartData()
+      getData2cart()
     }
     else if (event.index == 2) {
       console.log('Cart click');
@@ -366,28 +382,28 @@
     //     $('#icon').html(html);
     // });
   }
-  function getCartData() {
-    var docRef = db.collection("UI").doc("cart");
-    docRef.get().then(function (doc) {
-      if (doc.exists) {
-        console.log("Document data:", doc.data());
-        var data = doc.data();
-        // $('#photo').html(data.cart[0].photo);
-        // $('#price').html(data.cart[0].price); 
-        var pic_template = $('#pic_template').html();
-        var html = ejs.render(pic_template, { cart: data.cart });
-        $('#pic').html(html);
-      } else {
-        // doc.data() will be undefined in this case
-        console.log("No such document!");
-      }
-    }).catch(function (error) {
-      console.log("Error getting document:", error);
-    });
-    // $.getJSON('cart.json', function (data) {
-    //     console.log(data);
-    // })
-  }
+  // function getCartData() {
+  //   var docRef = db.collection("UI").doc("cart");
+  //   docRef.get().then(function (doc) {
+  //     if (doc.exists) {
+  //       console.log("Document data:", doc.data());
+  //       var data = doc.data();
+  //       // $('#photo').html(data.cart[0].photo);
+  //       // $('#price').html(data.cart[0].price); 
+  //       var pic_template = $('#pic_template').html();
+  //       var html = ejs.render(pic_template, { cart: data.cart });
+  //       $('#pic').html(html);
+  //     } else {
+  //       // doc.data() will be undefined in this case
+  //       console.log("No such document!");
+  //     }
+  //   }).catch(function (error) {
+  //     console.log("Error getting document:", error);
+  //   });
+  //   // $.getJSON('cart.json', function (data) {
+  //   //     console.log(data);
+  //   // })
+  // }
   function getproductData(name) {
     if (name == null) {
       db.collection("PRODUCTS").get()
@@ -488,12 +504,11 @@ document.getElementById('tabbar').setActiveTab(2);
     // localStorage.setItem('title', item);
   }
   const data = []
-
+  
   function tatol() {
     console.log(search);
     db.collection("PRODUCTS").get()
       .then(function (querySnapshot) {
-
         querySnapshot.docs.forEach(function (item) {
           data.push(item)
           console.log(data)
@@ -512,11 +527,23 @@ console.log("888",title);
     console.log('tset',title);
 
         // doc.data() is never undefined for query doc snapshots
-        
+        if (title == 0) {var html = "ไม่มีสินค้าที่คุณเลือก"
+            db.collection("PRODUCTS").get()
+              .then(function (querySnapshot) {
+                // doc.data() is never undefined for query doc snapshots
+                var product_template = $('#product_template').html();
+                console.log(querySnapshot);
+                html += ejs.render(product_template, { product: querySnapshot.docs });
+                $('#product').html(html);
+              })
+              .catch(function (error) {
+                console.log("Error getting documents: ", error);
+              });}
+        else{
         var product_template = $('#product_template').html();
          var html = ejs.render(product_template, { product: title });
         $('#product').html(html);
-  
+  }
 
 // console.log(tests)
 // db.collection("PRODUCTS").where("title", "==",tests).get()
@@ -532,6 +559,39 @@ console.log("888",title);
 //       });
 // }}
  }
+ var dataCart = [];
+function addtocart(add2cart){
+  localStorage.clear('quentinTarantino');
+localStorage.setItem('quentinTarantino',add2cart);
+var retrievedData = localStorage.getItem("quentinTarantino");
+console.log(retrievedData);
+dataCart.push(retrievedData);
+
+alert(dataCart);
+}
+//????????? array ??????????????? firebase ?????????????????? template
+
+function getData2cart(){
+  
+  
+  document.getElementById('pic').innerHTML=""
+  console.log(dataCart);
+  
+  dataCart.forEach(function(dataCart){
+    var apr = db.collection("PRODUCTS").where("pid","==",dataCart);
+    apr.get().then(function (querySnapshot) {
+      console.log(querySnapshot.docs)
+      var pic_template = $('#pic_template').html();
+      var  html = ejs.render(pic_template, { cart: querySnapshot.docs });
+      console.log(html);
+
+     
+      
+     $('#pic').append(html);
+    })  
+  })
+ 
+}
 </script>
 
 </html>
