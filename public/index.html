@@ -93,7 +93,7 @@
         <script id="icon_template" type="text/template"> 
                   <ons-row class="category" style="text-align:center">      
                         <% categories.forEach(function(category){%>
-                    <ons-col modifier="nodivider" id="Category_1" onclick="changeTab('<%= category.name %>')"width="33%"value="<%= category.name %>">
+                    <ons-col modifier="nodivider" id="Category_1"  onclick="changeTab('<%= category.name %>')"width="33%"value="<%= category.name %>">
                         <div class="category_wrapper">
                             <figure class="category_thumbnail">
                                 <ons-icon id="icon1" icon="<%= category.icon %>"></ons-icon>
@@ -235,7 +235,9 @@
 
   <template id="tab3.html">
     <ons-page>
-
+        <p style="text-align: center; margin-top: 10px;">
+            <ons-search-input placeholder="Search" onchange="search(this.value)"></ons-search-input>
+          </p>
       <div id="product"></div>
       <script id="product_template" type="text/template"> 
  <ons-row>
@@ -571,7 +573,9 @@ var retrievedData = localStorage.getItem("quentinTarantino");
 console.log(retrievedData);
 dataCart.push(retrievedData);
 
-alert(dataCart);
+ ons.notification.toast("เพิ่มสินค้าใส่ตะกร้า", {
+    timeout: 2000
+  });
 }
 //????????? array ??????????????? firebase ?????????????????? template
 
