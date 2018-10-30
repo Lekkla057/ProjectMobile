@@ -204,11 +204,12 @@
 
       <div id="pic"></div>
         <script id="pic_template" type="text/template"> 
+          <% var i=0 %>
                     <% cart.forEach(function(cart){%>
             <div>          
             <ons-list-item>
                 <div class="left">
-                    <img class="list-item__thumbnail" src="<%= cart.data().picc %>">
+                    <img class="list-item__thumbnail" src="<%= cart.data().picc[0] %>">
                 </div>
                 <div class="center">
                     <span class="list-item__title"><%= cart.itemname %></span>
@@ -216,10 +217,10 @@
                 </div>
                 <div class="right">
 
-                    <ons-icon icon="md-delete"></ons-icon></div>
+                    <ons-icon icon="md-delete" onclick="delete(<% i %>)"></ons-icon></div>
 
                   </div>
-            </ons-list-item><%});%> 
+            </ons-list-item><%i=i+1 });%> 
 
         </Script>
     
@@ -241,7 +242,7 @@
           %>
 <ons-col width="33%" >
   <ons-card onclick="detail('<%- products.pid %>')">
-        <img class="" src="<%= products.picc %>" width="99%"height="70px"><br>
+        <img class="" src="<%= products.picc[0] %>" width="99%"height="70px"><br>
 <%= products.Category %><br>
 <%= products.title %><br>
 ฿<%= products.price %>
@@ -270,17 +271,18 @@
       <script id="detail_template" type="text/template"> 
         <ons-card>
           <ons-carousel swipeable auto-scroll overscrollable id="carousel" style="height: 300px;">
-            <% detail.forEach(function(data){   
-              var data = data.data(); %>
-                <ons-carousel-item id="carousel1DeP" style="background: url('<%=data.picc%>') no-repeat center; background-size: contain;">
+            <% detail.forEach(function(data){  
+              var data = data.data().picc; %>
+
+              <% data.forEach(function(data){   %>
+                <ons-carousel-item id="carousel1DeP" style="background: url('<%= data %>') no-repeat center; background-size: contain;">  
                 </ons-carousel-item>
-                <ons-carousel-item id="carousel2DeP" style="background: url('images/2.jpg') no-repeat center; background-size: contain;">
-                </ons-carousel-item>
-                <ons-carousel-item id="carousel3DeP" style="background: url('images/3.jpg') no-repeat center; background-size: contain;">
-                </ons-carousel-item>
-  
+                <% })%>                                        
+                <% })%>
+              
          </ons-carousel>
-            
+         <% detail.forEach(function(data){   
+          var data = data.data(); %>
           <div class="title">
             <%= data.price%>
           </div>
@@ -421,7 +423,7 @@
       db.collection("PRODUCTS").where("Category", "==", name).get()
         .then(function (querySnapshot) {
           if (querySnapshot.docs.length == 0) {
-            var html = "ไม่มีสินค้าที่คุณเลือก"
+            var html = "<font color='red'>ไม่มีสินค้าที่คุณเลือก</font>"
             db.collection("PRODUCTS").get()
               .then(function (querySnapshot) {
                 // doc.data() is never undefined for query doc snapshots
@@ -527,7 +529,7 @@ console.log("888",title);
     console.log('tset',title);
 
         // doc.data() is never undefined for query doc snapshots
-        if (title == 0) {var html = "ไม่มีสินค้าที่คุณเลือก"
+        if (title == 0) {var html = "<font color='red'>ไม่มีสินค้าที่คุณเลือก</font>"
             db.collection("PRODUCTS").get()
               .then(function (querySnapshot) {
                 // doc.data() is never undefined for query doc snapshots
