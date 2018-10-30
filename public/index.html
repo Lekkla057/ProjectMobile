@@ -204,8 +204,10 @@
 
       <div id="pic"></div>
         <script id="pic_template" type="text/template"> 
-          <% var i=0 %>
-                    <% cart.forEach(function(cart){%>
+                    <% 
+                     cart.forEach(function(cart){
+                     console.log(cart)
+                      %>
             <div>          
             <ons-list-item>
                 <div class="left">
@@ -217,10 +219,10 @@
                 </div>
                 <div class="right">
 
-                    <ons-icon icon="md-delete" onclick="delete(<% i %>)"></ons-icon></div>
+                    <ons-icon icon="md-delete" onclick="deleteb(<%=num%>)"></ons-icon></div>
 
                   </div>
-            </ons-list-item><%i=i+1 });%> 
+            </ons-list-item><% });%> 
 
         </Script>
     
@@ -575,24 +577,43 @@ alert(dataCart);
 
 function getData2cart(){
   
-  
+  var Delete=[]
   document.getElementById('pic').innerHTML=""
   console.log(dataCart);
-  
+  var j=0
+  dataCart.forEach(function(remove) {
+    Delete.push(j)
+    console.log(Delete)
+    j++
+  });
+var testnum = 0;
   dataCart.forEach(function(dataCart){
     var apr = db.collection("PRODUCTS").where("pid","==",dataCart);
     apr.get().then(function (querySnapshot) {
       console.log(querySnapshot.docs)
       var pic_template = $('#pic_template').html();
-      var  html = ejs.render(pic_template, { cart: querySnapshot.docs });
+      var  html = ejs.render(pic_template, { cart: querySnapshot.docs,num:testnum });
       console.log(html);
 
      
       
      $('#pic').append(html);
+        testnum = testnum +1;
     })  
   })
  
+}
+
+function deleteb(i) {
+  console.log(i);
+
+  console.log(dataCart);
+  
+  var remove= dataCart.splice(i,1)
+
+  alert("ลบสินค้าสำเร็จ");
+  getData2cart()
+
 }
 </script>
 
