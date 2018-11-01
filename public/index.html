@@ -56,11 +56,12 @@
 
       <ons-tabbar swipeable position="auto" id="tabbar">
         <ons-tab page="tab1.html" label="Home" icon="ion-home, material:md-home"  active>
+        </ons-tab> 
+        <ons-tab page="tab3.html" label="product" icon="ion-briefcase" active-icon="ion-briefcase">
         </ons-tab>
         <ons-tab page="tab2.html" label="Cart" icon="md-shopping-cart"id="Fillbadge" badge="" active-icon="md-shopping-cart">
         </ons-tab>
-        <ons-tab page="tab3.html" label="product" icon="md-shopping-cart" active-icon="md-shopping-cart">
-        </ons-tab>
+       
        
       </ons-tabbar>
 
@@ -93,7 +94,7 @@
         <script id="icon_template" type="text/template"> 
                   <ons-row class="category" style="text-align:center">      
                         <% categories.forEach(function(category){%>
-                    <ons-col modifier="nodivider" id="Category_1"  onclick="changeTab('<%= category.name %>')"width="33%"value="<%= category.name %>">
+                    <ons-col modifier="nodivider" id="Category_1"  class="Category_1" onclick="changeTab('<%= category.name %>')"width="33%"value="<%= category.name %>">
                         <div class="category_wrapper">
                             <figure class="category_thumbnail">
                                 <ons-icon id="icon1" icon="<%= category.icon %>"></ons-icon>
@@ -111,44 +112,9 @@
       </div>
 
       <style type="text/css">
-        .recomended_playlist {
-          padding-left: 10px;
-        }
-        .recomended_playlist_title {
-          font-size: 12px;
-          font-weight: bold;
-        }
-        .thumbnail {
-          width: 120px;
-          height: 120px;
-          display: table;
-          background-color: rgba(0, 0, 0, 0.42);
-        }
-        .thumbnail ons-icon {
-          font-size: 70px;
-          color: rgba(190, 190, 190, 0.74);
-          display: table-cell;
-          vertical-align: middle !important;
-        }
-        .recomended_list {
-          height: 150px;
-        }
-        .recomended {
-          background: linear-gradient(rgb(208, 247, 211), #151715);
-          padding-top: 44px;
-        }
-        .menu_list {
-          background: transparent;
-        }
-        .menu_item {
-          color: white;
-          font-size: 12px;
-        }
-        .menu_item ons-icon {
-          margin-right: 10px;
-          color: white;
-          font-size: 16px;
-        }
+     
+       
+       
         .category {
           margin: 20px 0px;
           padding: 0px 30px;
@@ -159,32 +125,16 @@
           background-color: #7CB4D4;
           border: 5px solid;
           border-color: white;
+          border-radius: 32%;
         }
         .category_wrapper ons-icon {
           font-size: 55px;
           padding-top: 10px;
           line-height: 0.75em;
         }
-        .category_wrapper1 {
-          width: 90%;
-          margin: auto;
-          background-color: rgba(100, 100, 100, 0.747);
-        }
-        .category_wrapper1 ons-icon {
-          font-size: 55px;
-          padding-top: 10px;
-          line-height: 0.75em;
-        }
-        .category_wrapper2 {
-          width: 90%;
-          margin: auto;
-          background-color: rgba(65, 65, 65, 0.815);
-        }
-        .category_wrapper2 ons-icon {
-          font-size: 55px;
-          padding-top: 10px;
-          line-height: 0.75em;
-        }
+      
+       
+      
         .category_thumbnail {
           display: inline-block;
           margin: 16px 0px;
@@ -220,7 +170,7 @@
                 </div>
                 <div class="right">
 
-                    <ons-icon icon="md-delete" onclick="deleteb(<%=num%>); delprice('<%= cart.data().price %>')"></ons-icon></div>
+                    <ons-icon icon="md-delete" onclick="remove(<%=num%>); removeprice('<%= cart.data().price %>')"></ons-icon></div>
 
                   </div>
             </ons-list-item><% });%> 
@@ -408,11 +358,8 @@ display: block;
       console.log('Home click');
       getHomeData()
     }
+    
     else if (event.index == 1) {
-      console.log('Cart click');
-      getData2cart()
-    }
-    else if (event.index == 2) {
       console.log('Cart click');
       var name = localStorage.getItem('name');
       var items = localStorage.getItem('items');
@@ -421,8 +368,13 @@ display: block;
       }
       else if (name != null&&items==null){ getproductData(name) }
       else if (name != null&&items==null){  }
+    }
+    else if (event.index == 2) {
+      console.log('Cart click');
+      getData2cart()
     }localStorage.clear();
   });
+
   function getHomeData() {
     var docRef = db.collection("UI").doc("home");
     docRef.get().then(function (doc) {
@@ -438,46 +390,15 @@ display: block;
         var html = ejs.render(icon_template, { categories: data.categories });
         $('#icon').html(html);
       } else {
-        // doc.data() will be undefined in this case
+      
         console.log("No such document!");
       }
     }).catch(function (error) {
       console.log("Error getting document:", error);
     });
-    // $.getJSON('home.json', function (data) {
-    //     console.log(data);
-    //    
-    //     var style = "background: url('" + data.slides[0] + "')no-repeat center;background-size: contain;";
-    //     $('#carousel1').attr('style', style);
-    //     $('#icon1').attr('icon', data.categories[0].icon);
-    //     $('#Category_1_name').html(data.categories[0].name);
-    //     var icon_template = $('#icon_template').html();
-    //     var html = ejs.render(icon_template, { categories: data.categories });
-    //     $('#icon').html(html);
-    // });
+  
   }
-  // function getCartData() {
-  //   var docRef = db.collection("UI").doc("cart");
-  //   docRef.get().then(function (doc) {
-  //     if (doc.exists) {
-  //       console.log("Document data:", doc.data());
-  //       var data = doc.data();
-  //       // $('#photo').html(data.cart[0].photo);
-  //       // $('#price').html(data.cart[0].price); 
-  //       var pic_template = $('#pic_template').html();
-  //       var html = ejs.render(pic_template, { cart: data.cart });
-  //       $('#pic').html(html);
-  //     } else {
-  //       // doc.data() will be undefined in this case
-  //       console.log("No such document!");
-  //     }
-  //   }).catch(function (error) {
-  //     console.log("Error getting document:", error);
-  //   });
-  //   // $.getJSON('cart.json', function (data) {
-  //   //     console.log(data);
-  //   // })
-  // }
+
   function getproductData(name) {
     if (name == null) {
       db.collection("PRODUCTS").get()
@@ -530,7 +451,7 @@ display: block;
   }
   function changeTab(name) {
     console.log(name)
-    document.getElementById('tabbar').setActiveTab(2);
+    document.getElementById('tabbar').setActiveTab(1);
     localStorage.setItem('name', name);
     // var name1 = localStorage.getItem('name');
     //  getproductData(name1)
@@ -559,6 +480,7 @@ display: block;
   }
   
   function search(search) {
+   console.log(search);
    
    const filterItems = (needle, heystack) => {
     let query = needle.toLowerCase();
@@ -572,9 +494,9 @@ display: block;
 
   console.log('tong',item);
   
-test(item);
+  searchpro(item);
 
-document.getElementById('tabbar').setActiveTab(2);
+document.getElementById('tabbar').setActiveTab(1);
     // localStorage.setItem('title', item);
   }
   const data = []
@@ -593,9 +515,9 @@ document.getElementById('tabbar').setActiveTab(2);
   }
 
 
-function test(title){
+function searchpro(title){
 console.log("888",title);
-// for(var i =0;i<tests.length;i++){
+
     
  
     console.log('tset',title);
@@ -619,24 +541,12 @@ console.log("888",title);
         $('#product').html(html);
   }
 
-// console.log(tests)
-// db.collection("PRODUCTS").where("title", "==",tests).get()
-//       .then(function (querySnapshot) {
-//         // doc.data() is never undefined for query doc snapshots
-//         console.log(querySnapshot.docs);
-//         var test_template = $('#test_template').html();
-//         var html = ejs.render(test_template, { test: querySnapshot.docs });
-//         $('#test').html(html);
-//       })
-//       .catch(function (error) {
-//         console.log("Error getting documents: ", error);
-//       });
-// }}
+
  }
  var dataCart = [];
-function addtocart(add2cart){
+function addtocart(add){
   localStorage.clear('quentinTarantino');
-localStorage.setItem('quentinTarantino',add2cart);
+localStorage.setItem('quentinTarantino',add);
 var retrievedData = localStorage.getItem("quentinTarantino");
 console.log(retrievedData);
 dataCart.push(retrievedData);
@@ -646,7 +556,7 @@ dataCart.push(retrievedData);
   });
   $("#Fillbadge").attr('badge', dataCart.length);
 }
-//????????? array ??????????????? firebase ?????????????????? template
+
 
 function getData2cart(){
   $("#Fillbadge").attr('badge','');
@@ -654,25 +564,25 @@ function getData2cart(){
   document.getElementById('pic').innerHTML=""
   console.log(dataCart);
   
-var testnum = 0;
+var num = 0;
   dataCart.forEach(function(dataCart){
     var apr = db.collection("PRODUCTS").where("pid","==",dataCart);
     apr.get().then(function (querySnapshot) {
       console.log(querySnapshot.docs)
       var pic_template = $('#pic_template').html();
-      var  html = ejs.render(pic_template, { cart: querySnapshot.docs,num:testnum });
+      var  html = ejs.render(pic_template, { cart: querySnapshot.docs,num:num });
       console.log(html);
 
      
       
      $('#pic').append(html);
-        testnum = testnum +1;
+        num = num +1;
     })  
   })
  
 }
 
-function deleteb(i) {
+function remove(i) {
   console.log(i);
 
   console.log(dataCart);
@@ -687,24 +597,24 @@ function deleteb(i) {
   getData2cart()
 
 }
-var priceitem = 0;
+var price = 0;
 
-  function totalprice(price1) {
-    var price1 = parseInt(price1, 10)
-    console.log(price1);
+  function totalprice(priceadd) {
+    var priceadd = parseInt(priceadd, 10)
+    console.log(priceadd);
 
-    priceitem = priceitem + price1;
-    $('#showprice').html("<p><b>&nbsp; Total Price is : </b>" + priceitem + " ฿</p>");
+    price = price + priceadd;
+    $('#showprice').html("<p><b>&nbsp; Total Price is : </b>" + price + " ฿</p>");
 
   }
-  function delprice(price2) {
-    var price2 = parseInt(price2, 10)
-    console.log(price2);
+  function removeprice(pricedel) {
+    var pricedel = parseInt(pricedel, 10)
+    console.log(pricedel);
 
-    priceitem = priceitem - price2;
-    if(priceitem==0){document.getElementById('showprice').innerHTML=''
+    price = price - pricedel;
+    if(price==0){document.getElementById('showprice').innerHTML=''
     }
-    else{$('#showprice').html("<p><b>&nbsp; Total Price is : </b>" + priceitem + " ฿</p>");}
+    else{$('#showprice').html("<p><b>&nbsp; Total Price is : </b>" + price + " ฿</p>");}
 
   }
   
