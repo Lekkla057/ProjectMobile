@@ -79,10 +79,10 @@
         <ons-carousel-item id="carousel1" style="background: url('')no-repeat center;background-size: contain;">
 
         </ons-carousel-item>
-        <ons-carousel-item id="carousel2" style="background: url(2.jpg)no-repeat center;background-size: contain;">
+        <ons-carousel-item id="carousel2" style="background: url('')no-repeat center;background-size: contain;">
 
         </ons-carousel-item>
-        <ons-carousel-item id="carousel3" style="background: url(3.jpg)no-repeat center;background-size: contain;">
+        <ons-carousel-item id="carousel3" style="background: url('')no-repeat center;background-size: contain;">
 
         </ons-carousel-item>
       </ons-carousel>
@@ -251,13 +251,11 @@
               <%= data.title %>
             </div>
             <ons-list>
-              <ons-list-header>RUgks</ons-list-header>
-              <ons-list-item>Vue</ons-list-item>
-              <ons-list-item>Angular</ons-list-item>
+            
               <ons-list-item><span class="rating-static rating-<%= data.rating*10%>"></span></ons-list-item>
             </ons-list>
           </div>
-          <ons-button modifier="large"  onclick="addtocart('<%= data.pid %>');totalprice('<%= data.price%>')">ADD TO CART</ons-button>
+          <ons-button modifier="large"  onclick="add('<%= data.pid %>');totalprice('<%= data.price%>')">ADD TO CART</ons-button>
           <%})%>
         </ons-card>
      
@@ -371,7 +369,7 @@ display: block;
     }
     else if (event.index == 2) {
       console.log('Cart click');
-      getData2cart()
+      showAdd()
     }localStorage.clear();
   });
 
@@ -384,6 +382,10 @@ display: block;
         $('#appname').html(data.appname);
         var style = "background: url('" + data.slides[0] + "')no-repeat center;background-size: contain;";
         $('#carousel1').attr('style', style);
+        var style = "background: url('" + data.slides[1] + "')no-repeat center;background-size: contain;";
+        $('#carousel2').attr('style', style);
+        var style = "background: url('" + data.slides[2] + "')no-repeat center;background-size: contain;";
+        $('#carousel3').attr('style', style);
         $('#icon1').attr('icon', data.categories[0].icon);
         $('#Category_1_name').html(data.categories[0].name);
         var icon_template = $('#icon_template').html();
@@ -544,7 +546,7 @@ console.log("888",title);
 
  }
  var dataCart = [];
-function addtocart(add){
+function add(add){
   localStorage.clear('quentinTarantino');
 localStorage.setItem('quentinTarantino',add);
 var retrievedData = localStorage.getItem("quentinTarantino");
@@ -558,7 +560,7 @@ dataCart.push(retrievedData);
 }
 
 
-function getData2cart(){
+function showAdd(){
   $("#Fillbadge").attr('badge','');
   
   document.getElementById('pic').innerHTML=""
@@ -594,7 +596,7 @@ function remove(i) {
   });
   $("#Fillbadge").attr('badge', dataCart.length);
 
-  getData2cart()
+  showAdd()
 
 }
 var price = 0;
