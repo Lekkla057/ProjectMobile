@@ -489,7 +489,7 @@ display: block;
     return heystack.filter(item => item.data().title.toLowerCase().indexOf(needle) >= 0);
   }
   console.log("55+", filterItems(search, data));
-  var item=filterItems(search, data);
+  var item=filterItems(search.toLowerCase(), data);
   console.log("xxx",item)
   localStorage.setItem('items', item);
   
